@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite App</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@2.50.0/dist/full.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2/dist/tailwind.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <!-- <script src="https://cdn.jsdelivr.net/npm/dotenv@16.4.3/lib/main.min.js" /> -->
+
+    <script src="https://unpkg.com/htmx.org@1.8.5"></script>
+
+    <!-- Alpine Plugins -->
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"
+    ></script>
+
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js"
+    ></script>
+    <script src="https://unpkg.com/htmx.org@latest/dist/ext/alpine-morph.js"></script>
+    <script
+      defer
+      src="https://unpkg.com/@alpinejs/morph@3.x.x/dist/cdn.min.js"
+    ></script>
+
+    <!-- Alpine Core -->
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+
+    <!-- <script type="module" src="snacks.js"></script> -->
+
+    <script type="module" src="main.js"></script>
+  </head>
+  <body x-data="setup()">
+    <div id="main_grid">
+      <section id="tests">
+        <template x-if="false">
+          <div>
+            <div
+              class="bg-base-100 rounded-box col-span-3 row-span-3 mx-2 flex w-72 flex-shrink-0 flex-col justify-center gap-4 p-4 shadow-xl xl:mx-0 xl:w-full svelte-1n6ue57"
+              x-data="{ open: false }"
+            >
+              <button
+                class="btn btn-primary"
+                x-text="!open ? 'Show' : 'Hide'"
+                @click="open = !open"
+              ></button>
+
+              <div x-show="open" x-collapse></div>
+            </div>
+
+            <template x-if="false">
+              <input type="text" x-model:value="greeting" />
+            </template>
+          </div>
+        </template>
+      </section>
+
+      <h1 class="text-3xl">%VITE_TODOIST_API_KEY%</h1>
+      <!-- Streaks -->
+      <section id="streaks">
+        <div
+          class="bg-base-100 rounded-box col-span-3 row-span-3 mx-2 flex w-72 flex-shrink-0 flex-col justify-center gap-4 p-4 shadow-xl xl:mx-0 xl:w-full svelte-1n6ue57"
+          x-data="{ open: false }"
+        >
+          <h1 class="text-xl text-secondary">Streaks 🌠</h1>
+          <div class="flex flex-row items-center justify-center gap-2">
+            <template x-for="snack in snacks">
+              <div class="flex flex-row">
+                <h2 x-text="snack.name"></h2>
+                <button
+                  class="btn btn-small btn-ghost"
+                  @click="snack.streak = confirm('Did you miss one?', 'Yes', 'Nope!') ? 0: snack.streak"
+                >
+                  👇
+                </button>
+                <p x-text="snack.streak"></p>
+                <button
+                  x-on:click="snack.streak++"
+                  class="btn btn-small btn-ghost"
+                >
+                  👆
+                </button>
+              </div>
+            </template>
+          </div>
+        </div>
+      </section>
+
+      <!-- GOALS -->
+      <section>
+        <div
+          class="bg-base-100 rounded-box col-span-3 row-span-3 mx-2 flex w-72 flex-shrink-0 flex-col justify-center gap-4 p-4 shadow-xl xl:mx-0 xl:w-full svelte-1n6ue57"
+        >
+          <h1 class="text-xl text-primary">Goals Met 🏆</h1>
+          <label for=""
+            >Total Goals:
+            <p x-text="goals?.length">10</p>
+          </label>
+          <template x-for="goal in goals">
+            <div class="stats" x-show="true" class="form-control">
+              <div class="stat">
+                <div x-text="goal.name" class="stat-title">
+                  Total Page Views
+                </div>
+                <div x-text="goal.count" x-text="goal.count" class="stat-value">
+                  89,400
+                </div>
+                <div class="stat-desc">21% more than last month</div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </section>
+
+      <!-- Sync samples -->
+
+      <section>
+        <div
+          class="bg-base-100 rounded-box col-span-3 row-span-3 mx-2 flex w-72 flex-shrink-0 flex-col justify-center gap-4 p-4 shadow-xl xl:mx-0 xl:w-full svelte-1n6ue57"
+        >
+          <!-- Session storage 1 -->
+          <!-- <template x-if="false">
+            <h1 class="text-xl text-secondary">Sync with sessionstorage!</h1>
+
+            <div
+              x-init="$watch('message', (val) => localStorage.setItem('msg', val))"
+            >
+              <div>
+                <code>localStorage.getItem('msg')</code>: "<span
+                  x-text="localStorage.getItem('msg')"
+                ></span
+                >"
+              </div>
+              <input x-model="message" />
+              <div>Output: <span x-text="message"></span></div>
+            </div>
+          </template> -->
+
+          <!-- Session storage todos sync -->
+          <a
+            href="https://codewithhugo.com/alpinejs-localstorage-sessionstorage/"
+          >
+            <h1 class="text-xl text-accent">Todos Sample</h1>
+          </a>
+          <div
+            x-data="create_new_todo"
+            x-init="$watch('todos', (val) => localStorage.setItem('todos', JSON.stringify(val)))"
+          >
+            <div>
+              <code>localStorage.getItem('todos')</code>:
+              <code x-text="localStorage.getItem('todos')"></code>
+            </div>
+            <div>
+              <button @click="todos = []; localStorage.removeItem('todos');">
+                Clear
+              </button>
+            </div>
+
+            <form @submit.stop.prevent="create_new_todo">
+              <input x-model="newTodo" />
+              <button>Add</button>
+            </form>
+
+            <ul>
+              Todos:
+              <template x-for="todo in todos" :key="todo.id">
+                <li>
+                  <span x-text="todo.text"></span>
+                  <button @click="todos = todos.filter(t => t.id !== todo.id)">
+                    x
+                  </button>
+                </li>
+              </template>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <template x-if="show_danger_zone">
+        <div
+          class="bg-base-100 rounded-box col-span-3 row-span-3 mx-2 flex w-72 flex-shrink-0 flex-col justify-center gap-4 p-4 shadow-xl xl:mx-0 xl:w-full svelte-1n6ue57"
+        >
+          <h1 class="text-xl text-error">⚠️ DANGER ZONE ⚠️</h1>
+
+          <button x-on:click="clear_all_data" class="btn btn-error">
+            Delete all data
+          </button>
+        </div>
+      </template>
+    </div>
+  </body>
+
+  <script type="module">
+    function get_key() {
+      console.log("hello there w/ mah kee");
+    }
+
+    export { get_key };
+    window.get_key = get_key;
+  </script>
+
+  <script>
+    // import { get_key } from "./main.js";
+    // get_key();
+    // const doist_key = import.meta.env.VITE_TODOIST_API_KEY;
+    // console.log('doist_key :>> ', doist_key);
+
+    function setup() {
+      return {
+        todos: [],
+        newTodo: "",
+        create_new_todo() {
+          this.todos = [].concat(
+            { id: this.badId(), text: this.newTodo },
+            this.todos
+          );
+
+          this.newTodo = "";
+        },
+        badId() {
+          return (Math.random() * 100000).toFixed(0);
+        },
+        clear_all_data() {
+          let choice = confirm(
+            "Seriously clear all data? 🤨",
+            "YES",
+            "Wait... noooo"
+          );
+          console.log("choice :>> ", choice);
+          localStorage.clear();
+        },
+        greeting: Alpine.$persist("hello world"),
+        snacks: Alpine.$persist([{ name: "Eggs", streak: 0 }]),
+        goals: Alpine.$persist([
+          { name: "Five In a Row 2", count: 0, total: 0 },
+          { name: "Meals on Time", count: 0, total: 0 },
+          { name: "Cover Letters Written", count: 0, total: 0 },
+        ]),
+        message: localStorage.getItem("msg"),
+
+        //sections
+        show_danger_zone: true,
+      };
+    }
+  </script>
+
+  <footer>
+    <div id="logos"></div>
+  </footer>
+</html>
